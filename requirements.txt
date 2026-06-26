@@ -1,0 +1,13 @@
+# Dipendenze del progetto AG-Breaker — Password Cracker Multi-Formato
+
+# Cracking di archivi ZIP cifrati con AES (sostituisce zipfile standard che non supporta AES)
+pyzipper>=0.3.6
+
+# Cracking di PDF protetti da password
+pikepdf>=8.0.0
+
+# Progress bar durante l'attacco (mostra quante password ha provato in tempo reale)
+tqdm>=4.0.0
+
+# Sempre utile per i test:
+pytest
