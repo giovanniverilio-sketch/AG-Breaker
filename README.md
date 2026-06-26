@@ -3,7 +3,7 @@
 Tool da riga di comando per il recupero di password su file cifrati (ZIP e PDF)
 tramite attacco a dizionario o brute force.
 
-Progetto finale — Corso di Programmazione Python (CYS)
+Progetto finale Programmazione Python — corso CYSS
 Autori: Abdelrahman Zaher — Giovanni Verilio.
 
 ---
