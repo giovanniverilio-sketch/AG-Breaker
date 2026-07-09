@@ -1,5 +1,5 @@
 import sys
-from agbreaker.cli import parse_args
+from src.agbreaker.cli import parse_args
 
 def main():
     # Sfrutta il parser creato in cli.py
