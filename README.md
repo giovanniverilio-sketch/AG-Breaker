@@ -145,6 +145,7 @@ AG-Breaker/
 └── tests/
     ├── test_bruteforce_attack.py
     ├── test_cracker_base.py
+    ├── test_detector.py
     ├── test_dictionary_attack.py
     └── test_polymorphism.py
 ```
