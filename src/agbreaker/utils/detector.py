@@ -1,28 +1,33 @@
 from pathlib import Path
-import pytest
-from agbreaker.utils.detector import detect_file_type, is_supported_file
 
-# Verifica che la funzione rilevi correttamente il tipo di file ZIP
-def test_detect_file_type_zip(tmp_path: Path):
-    zip_file = tmp_path / "test.zip"
-    zip_file.write_bytes(b"PK\x03\x04contenuto")
-    assert detect_file_type(str(zip_file)) == "zip"
+SUPPORTED_FORMATS = {"zip", "pdf"}
 
-# Verifica che la funzione rilevi correttamente il tipo di file PDF
-def test_detect_file_type_pdf(tmp_path: Path):
-    pdf_file = tmp_path / "test.pdf"
-    pdf_file.write_bytes(b"%PDF-1.7 contenuto")
-    assert detect_file_type(str(pdf_file)) == "pdf"
+# Funzione per rilevare il tipo di file in base al contenuto del file
+def detect_file_type(filepath: str) -> str:
+    path = Path(filepath)
 
-# Verifica che venga restituito False per un file non supportato
-def test_detect_file_type_unsupported(tmp_path: Path):
-    txt_file = tmp_path / "test.txt"
-    txt_file.write_text("ciao", encoding="utf-8")
-    with pytest.raises(ValueError):
-        detect_file_type(str(txt_file))
+    if not path.exists(): # verifica se il percorso esiste
+        raise FileNotFoundError(f"File non trovato: {filepath}")
 
-# Verifica che venga sollevata l'eccezione corretta quando il file non esiste
-def test_is_supported_file(tmp_path: Path):
-    pdf_file = tmp_path / "test.pdf"
-    pdf_file.write_bytes(b"%PDF-1.7 contenuto")
-    assert is_supported_file(str(pdf_file)) is True
+    if not path.is_file(): # verifica se il percorso è un file valido
+        raise ValueError(f"Il percorso non è un file valido: {filepath}")
+
+    with path.open("rb") as file: # apre il file in modalità binaria per leggere i primi 8 byte
+        header = file.read(8)
+
+    if header.startswith(b"PK"): # verifica se il file è un file ZIP controllando i primi due byte
+        return "zip"
+
+    if header.startswith(b"%PDF"): # verifica se il file è un file PDF controllando i primi 4 byte
+        return "pdf"
+
+    # Se il file non è né ZIP né PDF, solleva un'eccezione
+    raise ValueError("Formato file non supportato. Sono supportati solo ZIP e PDF.")
+
+# Funzione per verificare se il file è supportato
+def is_supported_file(filepath: str) -> bool:
+    try:
+        detect_file_type(filepath)
+        return True
+    except (FileNotFoundError, ValueError):
+        return False
