@@ -143,6 +143,7 @@ AG-Breaker/
 │           ├── checkpoint.py
 │           └── detector.py
 └── tests/
+    ├── test_bruteforce_attack.py
     ├── test_cracker_base.py
     ├── test_dictionary_attack.py
     └── test_polymorphism.py
