@@ -1,25 +1,24 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-"""
-Classe astratta per i cracker di file protetti da password. 
-Definisce l'interfaccia comune per tutti i cracker specifici di tipo di file.
-"""
-class Cracker(ABC):
 
-    # Inizializza il cracker con il percorso del file da attaccare.
+
+class Cracker(ABC):
     def __init__(self, filepath: str):
+
         path = Path(filepath)
 
-        if not path.exists(): # se il file non esiste, solleva un'eccezione FileNotFoundError
+        if not path.exists():
             raise FileNotFoundError(f"File non trovato: {filepath}")
 
-        if not path.is_file(): # se il percorso non è un file valido, solleva un'eccezione ValueError
+        if not path.is_file():
             raise ValueError(f"Il percorso non è un file valido: {filepath}")
 
-        self.filepath = filepath # salva il percorso del file da attaccare come attributo dell'istanza
+        self.filepath = filepath
 
-    @abstractmethod # indica che il metodo deve essere implementato dalle sottoclassi
-
-    # Prova una password sul file protetto. Deve essere implementato dalle sottoclassi specifiche per ogni tipo di file.
+    @abstractmethod
     def prova_password(self, password: str) -> bool:
-        pass
+
+        raise NotImplementedError
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(filepath={self.filepath!r})"
