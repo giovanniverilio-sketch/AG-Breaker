@@ -15,15 +15,21 @@ class ZipCracker(Cracker):
         try:
             with pyzipper.AESZipFile(self.filepath) as zip_file:
                 zip_file.pwd = password.encode("utf-8")
-                file_list = zip_file.namelist()
+                file_list = []
+
+                for file_info in zip_file.infolist():
+                    if not file_info.is_dir():
+                        file_list.append(file_info)
 
                 if not file_list:
                     return False
 
-                # Basta un file corretto per confermare la password: non
-                # serve estrarre tutto l'archivio.
-                zip_file.read(file_list[0])
-                return True
+                for file_info in file_list:
+                    if file_info.flag_bits & 0x1:
+                        zip_file.read(file_info.filename)
+                        return True
+
+                return False
 
         except RuntimeError:
             # Password errata: pyzipper solleva RuntimeError in questo caso.
